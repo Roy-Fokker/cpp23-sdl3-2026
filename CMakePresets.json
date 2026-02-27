@@ -1,0 +1,77 @@
+{
+	"version": 9,
+	"$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+	"cmakeMinimumRequired": {
+		"major": 4,
+		"minor": 2
+	},
+	"configurePresets": [
+		{
+			"name": "base",
+			"description": "Set some basic directories",
+			"hidden": true,
+			"binaryDir": "${sourceDir}/build/${presetName}",
+			"installDir": "${sourceDir}/install/${presetName}",
+			"cacheVariables": {
+				"CMAKE_EXPORT_COMPILE_COMMANDS": true,
+				"CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/bin",
+				"CMAKE_MODULE_PATH": "${sourceDir}/cmake"
+			}
+		},
+		{
+			"name": "cpm",
+			"hidden": true,
+			"description": "CPM.Cmake Configuration",
+			"cacheVariables": {
+				"CPM_SOURCE_CACHE": "${sourceDir}/.cache/CPM"
+			}
+		},
+		{
+			"name": "ninja",
+			"displayName": "Ninja build",
+			"description": "Generate Ninja project files for current configuration",
+			"hidden": true,
+			"generator": "Ninja"
+		},
+		{
+			"name": "clang",
+			"displayName": "LLVM Clang++ configuration",
+			"hidden": true,
+			"cacheVariables": {
+				"CMAKE_CXX_COMPILER": "clang++",
+				"CMAKE_CXX_FLAGS": "-std=c++23 -Wall -Wextra"
+			},
+			"environment": {
+				"CC": "clang",
+				"CXX": "clang++"
+			}
+		},
+		{
+			"name": "linux-default",
+			"displayName": "Linux x64 Build",
+			"inherits": [
+				"base",
+				"cpm",
+				"ninja",
+				"clang"
+			],
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			},
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Linux"
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "linux-debug",
+			"configurePreset": "linux-default",
+			"displayName": "Linux Debug",
+			"description": "Build using ninja, debug configuration for Linux",
+			"configuration": "Debug"
+		}
+	]
+}
