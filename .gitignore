@@ -87,5 +87,8 @@ Testing/
 # Visual Studio folders
 .vs/
 
+# Sublime Text files
+*.sublime-*
+
 # other files/folders
 .DS_Store/
