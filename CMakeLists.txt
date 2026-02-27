@@ -19,5 +19,8 @@ project(sdl3-cpp23-project-template
 	HOMEPAGE_URL "https://roy-fokker.github.io/sdl3-cpp23-project-template/"
 	DESCRIPTION "SDL3 + C++23 based Project Template.")
 
+# Include/Download Dependencies
+include(${CMAKE_MODULE_PATH}/dependencies.cmake)
+
 # executable source folder
 add_subdirectory(src)

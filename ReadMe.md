@@ -26,3 +26,14 @@ Using what was learned from old template and new knowledge gained since then.
 ## ClangD pecularities
 - absolute path to `compile_commands.json` file's directory is required.
   - makes this file not very portable, must be configured for each environment/build machine
+
+
+## SDL3 pecularities
+- requires installation of additional dependencies on linux
+  ```bash
+  libwayland-dev libpipewire-0.3-dev libdecor-0-dev libxcursor-dev \
+  libxrandr-dev libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev \
+  libgles2-mesa-dev libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev \
+  libxi-dev libxss-dev libxtst-dev
+
+  ```
