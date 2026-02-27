@@ -20,5 +20,18 @@ target_sources(${PRJ_APP_NAME}
 		main.cpp
 
 	# magic encantations for C++ Modules Support in CMake
-	# PRIVATE FILE_SET app_modules TYPE CXX_MODULES FILES
+	PRIVATE FILE_SET app_modules TYPE CXX_MODULES FILES
+	sdl.cppm
+)
+
+# precompiled headers
+target_precompile_headers(${PRJ_APP_NAME}
+	PRIVATE
+		pch.hpp
+)
+
+# libraries used by this application
+target_link_libraries(${PRJ_APP_NAME}
+	PRIVATE
+		SDL3::SDL3   # SDL3 Library
 )
