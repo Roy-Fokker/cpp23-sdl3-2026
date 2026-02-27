@@ -13,14 +13,16 @@ Using what was learned from old template and new knowledge gained since then.
 - Clang-Format
 - Clang-Tidy
 
-
 ## Library Dependencies
 - SDL v3.4.x
 - GLM
 - FMT
 
-
 ## CMake pecularities
 - Package management is via CPM.cmake
-- CMake 4.2x and lower require CMAKE_EXPERIMENTAL flag
+- CMake 4.3x and lower require CMAKE_EXPERIMENTAL flag
 - This flag is required to enable `import std;` and general modules functionality
+
+## ClangD pecularities
+- absolute path to `compile_commands.json` file's directory is required.
+  - makes this file not very portable, must be configured for each environment/build machine
