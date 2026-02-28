@@ -22,6 +22,9 @@ target_sources(${PRJ_APP_NAME}
 	# magic encantations for C++ Modules Support in CMake
 	PRIVATE FILE_SET app_modules TYPE CXX_MODULES FILES
 	sdl.cppm
+	sdl-base.cppm
+	sdl-window.cppm
+	sdl-gpu.cppm
 )
 
 # precompiled headers
