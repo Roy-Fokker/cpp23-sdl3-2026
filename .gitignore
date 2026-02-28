@@ -89,6 +89,7 @@ Testing/
 
 # Sublime Text files
 *.sublime-*
+!.sublime/*.sublime-project
 
 # other files/folders
 .DS_Store/
