@@ -39,6 +39,11 @@
 			"clangd": {
 				"enabled": true
 			}
+		},
+		"ClangFormat": {
+			"enabled": true,
+			"style": "file",
+			"format_on_save": true
 		}
 	}
 }
