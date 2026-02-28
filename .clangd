@@ -1,3 +1,6 @@
 CompileFlags:
   Add: [-std=c++23]
   CompilationDatabase: "/home/neel/Projects/cpp23-sdl3-2026/build/linux-default/"
+
+Completion:
+  HeaderInsertion: Never

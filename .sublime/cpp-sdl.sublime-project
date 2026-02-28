@@ -10,7 +10,7 @@
 		{
 			"name": "CMake",
 			"working_dir": "$folder",
-			"cmd": ["cmake"],
+			"cmd": [""],
 			"variants": [
 				{
 					"name": "configure",
@@ -37,13 +37,7 @@
 	{
 		"LSP": {
 			"clangd": {
-				"enabled": true,
-				"initializationOptions": {
-					"clangd.clang-tidy": true,
-					"clangd.background-index": true,
-					"clangd.header-insertion": "never",
-					"clangd.completion-style": "detailed",
-				}
+				"enabled": true
 			}
 		}
 	}
