@@ -43,6 +43,11 @@ auto main() -> int
 		 .title  = TITLE,
     });
 
+	{
+		using namespace sdl::window;
+		set_mouse_mode(pWnd.get(), mouse_mode::relative);
+	}
+
 	test_window(pWnd.get());
 
 	return 0;

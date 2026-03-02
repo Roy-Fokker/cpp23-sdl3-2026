@@ -25,4 +25,30 @@ export namespace sdl::window
 
 		return window_ptr{ pWnd };
 	}
+
+	enum class mouse_mode : uint8_t
+	{
+		relative,
+		absolute,
+	};
+
+	auto set_mouse_mode(SDL_Window *wnd, mouse_mode mode) -> bool
+	{
+		using enum mouse_mode;
+
+		switch (mode)
+		{
+		case relative:
+			return SDL_SetWindowRelativeMouseMode(wnd, true);
+			break;
+		case absolute:
+			return SDL_SetWindowRelativeMouseMode(wnd, false);
+			break;
+		default:
+			assert(false and "Unhandled mouse mode.");
+			break;
+		}
+
+		return false;
+	}
 }
