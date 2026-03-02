@@ -11,13 +11,13 @@ export namespace sdl::window
 	{
 		uint32_t width;
 		uint32_t height;
-		std::string title;
+		std::string_view title;
 		SDL_WindowFlags flags = {};
 	};
 
 	auto make_window(const description &desc) -> window_ptr
 	{
-		auto pWnd = SDL_CreateWindow(desc.title.c_str(),
+		auto pWnd = SDL_CreateWindow(desc.title.data(),
 		                             static_cast<int>(desc.width),
 		                             static_cast<int>(desc.height),
 		                             desc.flags);

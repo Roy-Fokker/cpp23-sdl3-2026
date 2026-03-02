@@ -26,15 +26,21 @@ void test_window(SDL_Window *pWnd)
 	SDL_DestroyRenderer(renderer);
 }
 
+using namespace std::literals;
+
 auto main() -> int
 {
 	std::println("Hello World!");
 
+	constexpr auto WIDTH  = 1000;
+	constexpr auto HEIGHT = WIDTH * 10 / 16;
+	constexpr auto TITLE  = "SDL Window"sv;
+
 	auto sdl_o = sdl::sdl_base();
 	auto pWnd  = sdl::window::make_window({
-		 .width  = 800,
-		 .height = 600,
-		 .title  = "SDL Window",
+		 .width  = WIDTH,
+		 .height = HEIGHT,
+		 .title  = TITLE,
     });
 
 	test_window(pWnd.get());
