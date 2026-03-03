@@ -1,5 +1,5 @@
 {
-	"version": 9,
+	"version": 10,
 	"$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
 	"cmakeMinimumRequired": {
 		"major": 4,
@@ -63,6 +63,45 @@
 				"lhs": "${hostSystemName}",
 				"rhs": "Linux"
 			}
+		},
+		{
+			"name": "msvc",
+			"displayName": "Microsoft Visual C++ configuration",
+			"hidden": true,
+			"cacheVariables": {
+				"CMAKE_CXX_FLAGS": "/utf-8 /EHsc /W4 /permissive- /Zc:__cplusplus /Zc:preprocessor /Zc:throwingNew /Zc:inline /Zc:externConstexpr /Zc:templateScope /Zc:checkGwOdr /Zc:enumTypes",
+				"CMAKE_PDB_OUTPUT_DIRECTORY": "${sourceDir}/build/${presetName}/pdb"
+			},
+			"environment": {
+				"CC": "cl.exe",
+				"CXX": "cl.exe"
+			},
+			"architecture": {
+				"value": "x64",
+				"strategy": "external"
+			},
+			"toolset": {
+				"value": "host=x64",
+				"strategy": "external"
+			}
+		},
+		{
+			"name": "windows-default",
+			"displayName": "Windows x64 Build",
+			"inherits": [
+				"base",
+				"cpm",
+				"ninja",
+				"msvc"
+			],
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			},
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
 		}
 	],
 	"buildPresets": [
@@ -71,7 +110,24 @@
 			"configurePreset": "linux-default",
 			"displayName": "Linux Debug",
 			"description": "Build using ninja, debug configuration for Linux",
-			"configuration": "Debug"
+			"configuration": "Debug",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Linux"
+			}
+		},
+		{
+			"name": "windows-debug",
+			"configurePreset": "windows-default",
+			"displayName": "Windows Debug",
+			"description": "Build using ninja, debug configuration for Windows",
+			"configuration": "Debug",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
 		}
 	]
 }
