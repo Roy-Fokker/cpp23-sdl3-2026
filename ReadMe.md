@@ -24,7 +24,8 @@ Using what was learned from old template and new knowledge gained since then.
 - This flag is required to enable `import std;` and general modules functionality
 
 ## ClangD pecularities
-- absolute path to `compile_commands.json` file's directory is required.
+- ~~absolute path to `compile_commands.json` file's directory is required.~~
+  Apparently, it is possible to use relative path from `.clangd` is possible, but...
   - makes this file not very portable, must be configured for each environment/build machine
 
 
@@ -37,3 +38,4 @@ Using what was learned from old template and new knowledge gained since then.
   libxi-dev libxss-dev libxtst-dev
 
   ```
+- On Wayland (linux), basic gpu device requires calling all the supporting frame/swapchain stuff. Else it will error out and no window will be shown. 
