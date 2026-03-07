@@ -44,4 +44,10 @@ export namespace sdl
 			fn(arg);
 		}
 	};
+
+	template <typename sdl_enum>
+	auto to_sdl(auto enum_value) -> sdl_enum
+	{
+		return static_cast<sdl_enum>(enum_value);
+	}
 } // namespace sdl
