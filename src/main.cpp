@@ -2,11 +2,8 @@ import std;
 
 import sdl;
 
-void test_window(SDL_Window *pWnd)
+void test_gpu(SDL_Window *wnd, SDL_GPUDevice *gpu)
 {
-	auto renderer = SDL_CreateRenderer(pWnd, nullptr);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
 	auto evt  = SDL_Event{};
 	auto quit = false;
 	while (not quit)
@@ -19,17 +16,30 @@ void test_window(SDL_Window *pWnd)
 				break;
 			}
 		}
-		SDL_RenderClear(renderer);
-		SDL_RenderPresent(renderer);
-	}
 
-	SDL_DestroyRenderer(renderer);
+		auto cb     = SDL_AcquireGPUCommandBuffer(gpu);
+		auto sc_img = sdl::gpu::next_swapchain_image(wnd, cb);
+
+		auto color_target = SDL_GPUColorTargetInfo{
+			.texture     = sc_img,
+			.clear_color = { 0.2f, 0.2f, 0.4f, 1.0f },
+			.load_op     = SDL_GPU_LOADOP_CLEAR,
+			.store_op    = SDL_GPU_STOREOP_STORE,
+		};
+
+		auto render_pass = SDL_BeginGPURenderPass(cb, &color_target, 1, nullptr);
+		SDL_EndGPURenderPass(render_pass);
+
+		SDL_SubmitGPUCommandBuffer(cb);
+	}
 }
 
 using namespace std::literals;
 
 auto main() -> int
 {
+	using namespace sdl::window;
+
 	std::println("Hello World!");
 
 	constexpr auto WIDTH  = 1000;
@@ -37,18 +47,20 @@ auto main() -> int
 	constexpr auto TITLE  = "SDL Window"sv;
 
 	auto sdl_o = sdl::sdl_base();
-	auto pWnd  = sdl::window::make_window({
+	auto pWnd  = make_window({
 		 .width  = WIDTH,
 		 .height = HEIGHT,
 		 .title  = TITLE,
     });
 
-	{
-		using namespace sdl::window;
-		set_mouse_mode(pWnd.get(), mouse_mode::relative);
-	}
+	auto gpu = sdl::gpu::make_gpu(pWnd.get());
 
-	test_window(pWnd.get());
+	std::println("GPU created");
+
+	{
+		set_mouse_mode(pWnd.get(), mouse_mode::relative);
+		test_gpu(pWnd.get(), gpu.get());
+	}
 
 	return 0;
 }

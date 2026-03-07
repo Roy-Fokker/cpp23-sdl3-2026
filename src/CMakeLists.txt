@@ -7,10 +7,14 @@ add_executable(${PRJ_APP_NAME})
 # ensure it's Standard C++ 23
 target_compile_features(${PRJ_APP_NAME} PRIVATE cxx_std_23)
 
+# Shader binary type [SPIRV, DXIL]
+set(SHADER_FORMAT "SPIRV")
+
 # set preprocessor defines
 target_compile_definitions(${PRJ_APP_NAME}
 	PRIVATE
 		$<$<CONFIG:Debug>:DEBUG>    # Ensure DEBUG macro is defined in debug build
+		${SHADER_FORMAT}            # Shader format we want to use
 )
 
 # source files for this application
