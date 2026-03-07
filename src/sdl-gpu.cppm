@@ -19,6 +19,30 @@ export namespace sdl::gpu
 	// Define GPU type with std::unique_ptr and custom deleter
 	using gpu_ptr = std::unique_ptr<SDL_GPUDevice, gpu_window_deleter>;
 
+	// Deleter for all gpu objects in SDL
+	template <auto fn>
+	struct gpu_deleter
+	{
+		SDL_GPUDevice *gpu = nullptr;
+		constexpr void operator()(auto *arg)
+		{
+			fn(gpu, arg);
+		}
+	};
+	// Define SDL GPU types with std::unique_ptr and custom deleter
+	using free_gfx_pipeline  = gpu_deleter<SDL_ReleaseGPUGraphicsPipeline>;
+	using gfx_pipeline_ptr   = std::unique_ptr<SDL_GPUGraphicsPipeline, free_gfx_pipeline>;
+	using free_comp_pipeline = gpu_deleter<SDL_ReleaseGPUComputePipeline>;
+	using comp_pipeline_ptr  = std::unique_ptr<SDL_GPUComputePipeline, free_comp_pipeline>;
+	using free_gfx_shader    = gpu_deleter<SDL_ReleaseGPUShader>;
+	using gfx_shader_ptr     = std::unique_ptr<SDL_GPUShader, free_gfx_shader>;
+	using free_gpu_buffer    = gpu_deleter<SDL_ReleaseGPUBuffer>;
+	using gpu_buffer_ptr     = std::unique_ptr<SDL_GPUBuffer, free_gpu_buffer>;
+	using free_gpu_texture   = gpu_deleter<SDL_ReleaseGPUTexture>;
+	using gpu_texture_ptr    = std::unique_ptr<SDL_GPUTexture, free_gpu_texture>;
+	using free_gpu_sampler   = gpu_deleter<SDL_ReleaseGPUSampler>;
+	using gfx_sampler_ptr    = std::unique_ptr<SDL_GPUSampler, free_gpu_sampler>;
+
 	enum class presentation_mode : uint8_t
 	{
 		vsync     = SDL_GPU_PRESENTMODE_VSYNC,
