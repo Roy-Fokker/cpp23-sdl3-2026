@@ -44,6 +44,10 @@
 			"enabled": true,
 			"style": "file",
 			"format_on_save": true
+		},
+		"RainbowBrackets": {
+			"enabled": true,
+			"coloring": true
 		}
 	}
 }
