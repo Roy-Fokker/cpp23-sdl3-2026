@@ -32,10 +32,11 @@ Using what was learned from old template and new knowledge gained since then.
 ## SDL3 pecularities
 - requires installation of additional dependencies on linux
   ```bash
-  libwayland-dev libpipewire-0.3-dev libdecor-0-dev libxcursor-dev \
-  libxrandr-dev libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev \
-  libgles2-mesa-dev libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev \
-  libxi-dev libxss-dev libxtst-dev
-
+# on PikaOS using Pikman package manager
+pikman i libxcursor-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev libegl1-mesa-dev \
+         libwayland-dev libxcursor-dev libxrandr-dev libxkbcommon-dev libdrm-dev      \
+         libudev-dev libdbus-1-dev libibus-1.0-dev libxi-dev                          \
+         libxss-dev libxtst-dev                                                       \
+         libpipewire-0.3-dev libdecor-0-dev
   ```
 - On Wayland (linux), basic gpu device requires calling all the supporting frame/swapchain stuff. Else it will error out and no window will be shown. 
