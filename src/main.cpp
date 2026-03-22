@@ -4,6 +4,8 @@ import sdl;
 
 void test_gpu(SDL_Window *wnd, SDL_GPUDevice *gpu)
 {
+	constexpr auto clear_color = SDL_FColor{0.2f, 0.2f, 0.4f, 1.0f};
+
 	auto evt  = SDL_Event{};
 	auto quit = false;
 	while (not quit)
@@ -22,7 +24,7 @@ void test_gpu(SDL_Window *wnd, SDL_GPUDevice *gpu)
 
 		auto color_target = SDL_GPUColorTargetInfo{
 			.texture     = sc_img,
-			.clear_color = { 0.2f, 0.2f, 0.4f, 1.0f },
+			.clear_color = clear_color,
 			.load_op     = SDL_GPU_LOADOP_CLEAR,
 			.store_op    = SDL_GPU_STOREOP_STORE,
 		};

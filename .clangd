@@ -1,6 +1,6 @@
 CompileFlags:
   Add: [-std=c++23]
-  CompilationDatabase: "./build/linux-default/"
+  CompilationDatabase: "./build/linux-default"
 
 Completion:
   HeaderInsertion: Never

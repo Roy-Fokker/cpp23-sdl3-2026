@@ -38,12 +38,23 @@
 			"displayName": "LLVM Clang++ configuration",
 			"hidden": true,
 			"cacheVariables": {
-				"CMAKE_CXX_COMPILER": "clang++",
 				"CMAKE_CXX_FLAGS": "-std=c++23 -Wall -Wextra"
 			},
 			"environment": {
 				"CC": "clang",
 				"CXX": "clang++"
+			}
+		},
+		{
+			"name": "gcc",
+			"displayName": "GUN GCC configuration",
+			"hidden": true,
+			"cacheVariables": {
+				"CMAKE_CXX_FLAGS": "-std=c++23 -Wall -Wextra"
+			},
+			"environment": {
+				"CC": "gcc",
+				"CXX": "g++"
 			}
 		},
 		{
