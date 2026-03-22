@@ -76,6 +76,24 @@
 			}
 		},
 		{
+			"name": "linux-gcc",
+			"displayName": "Linux x64 Build",
+			"inherits": [
+				"base",
+				"cpm",
+				"ninja",
+				"gcc"
+			],
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			},
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Linux"
+			}
+		},
+		{
 			"name": "msvc",
 			"displayName": "Microsoft Visual C++ configuration",
 			"hidden": true,
@@ -119,6 +137,18 @@
 		{
 			"name": "linux-debug",
 			"configurePreset": "linux-default",
+			"displayName": "Linux Debug",
+			"description": "Build using ninja, debug configuration for Linux",
+			"configuration": "Debug",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Linux"
+			}
+		},
+		{
+			"name": "linux-debug-gcc",
+			"configurePreset": "linux-gcc",
 			"displayName": "Linux Debug",
 			"description": "Build using ninja, debug configuration for Linux",
 			"configuration": "Debug",
