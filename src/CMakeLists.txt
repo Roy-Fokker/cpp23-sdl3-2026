@@ -29,6 +29,7 @@ target_sources(${PRJ_APP_NAME}
 	sdl-base.cppm
 	sdl-window.cppm
 	sdl-gpu.cppm
+	application.cppm
 )
 
 # precompiled headers
