@@ -18,18 +18,20 @@ Using what was learned from old template and new knowledge gained since then.
 - GLM
 - FMT
 
-## CMake pecularities
+## Pecularities
+
+### CMake
 - Package management is via CPM.cmake
 - CMake 4.3x and lower require CMAKE_EXPERIMENTAL flag
 - This flag is required to enable `import std;` and general modules functionality
 
-## ClangD pecularities
+### ClangD
 - ~~absolute path to `compile_commands.json` file's directory is required.~~  
   Apparently, it is possible to use relative path from `.clangd` is possible, but...
   - this file not very portable, must be configured for each environment/build machine
 
 
-## SDL3 pecularities
+### SDL3
 - requires installation of additional dependencies on linux,  
   on `PikaOS` using `Pikman package manager`
   ```bash
@@ -43,3 +45,33 @@ Using what was learned from old template and new knowledge gained since then.
 
 ## GCC issues
 While there is a preset for GCC in the `CmakePresets.json`, project doesn't build, as GCC is throwing errors on compile. Suspect some flags need to be enabled for GCC to compile modules.
+
+## Build Instructions
+- On Windows
+```shell
+  # Configure Project
+  cmake --preset windows-default
+  # Build Project, parameter order matters
+  cmake --build --preset windows-debug
+```
+- On Linux
+```shell
+  # Configure Project
+  cmake --preset linux-default
+  # Build Project, parameter order matters
+  cmake --build --preset linux-debug
+```
+
+## Basic template code flow
+- main
+  - application class init
+    - Create SDL base object
+    - Create SDL Window object
+    - Create SDL GPU object
+  - application run 
+    - Prepare Scene
+    - Loop till quit event
+      - Handle SDL Events
+      - Update application state
+      - Draw
+  - clean up automatic

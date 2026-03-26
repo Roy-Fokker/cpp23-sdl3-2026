@@ -9,10 +9,10 @@ namespace s_gpu = sdl::gpu;
 
 namespace
 {
-	constexpr auto ASPECT_RATIO = 16.f / 9.f;
-	constexpr auto WIDTH        = 1000u;
-	constexpr auto HEIGHT       = static_cast<uint32_t>(WIDTH / ASPECT_RATIO);
-	constexpr auto TITLE        = "SDL3 GPU C++23 Project Template"sv;
+	constexpr auto ASPECT_RATIO = 16.f / 9.f;                                  // Window Aspect Ratio
+	constexpr auto WIDTH        = 1000u;                                       // Width of the window
+	constexpr auto HEIGHT       = static_cast<uint32_t>(WIDTH / ASPECT_RATIO); // Height of the Window based on width and aspect ratio
+	constexpr auto TITLE        = "SDL3 GPU C++23 Project Template"sv;         // Window title
 }
 
 export namespace project
@@ -29,12 +29,12 @@ export namespace project
 		void draw();
 
 		// Private Members
-		sdl::sdl_base _sdl;
-		s_win::window_ptr wnd = s_win::make_window({ WIDTH, HEIGHT, TITLE });
-		s_gpu::gpu_ptr gpu    = s_gpu::make_gpu(wnd.get());
-		SDL_Event evt         = {};
+		sdl::sdl_base _sdl;                                                    // SDL base object
+		s_win::window_ptr wnd = s_win::make_window({ WIDTH, HEIGHT, TITLE });  // SDL Window object
+		s_gpu::gpu_ptr gpu    = s_gpu::make_gpu(wnd.get());                    // SDL GPU object
+		SDL_Event evt         = {};                                            // SDL Event object
 
-		bool quit = false;
+		bool quit = false; // Loop control
 	};
 }
 
