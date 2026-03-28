@@ -110,4 +110,170 @@ export namespace sdl::gpu
 
 		return texture;
 	}
+
+	enum class shader_stage : uint8_t
+	{
+		invalid,
+		vertex,
+		fragment,
+		compute,
+	};
+
+	enum class raster_type : uint8_t
+	{
+		none_fill,
+		none_wire,
+		front_ccw_fill,
+		front_ccw_wire,
+		back_ccw_fill,
+		back_ccw_wire,
+		front_cw_fill,
+		front_cw_wire,
+		back_cw_fill,
+		back_cw_wire,
+	};
+
+	enum class blend_type : uint8_t
+	{
+		none,
+		opaque,
+		alpha,
+		additive,
+		non_premultiplied,
+	};
+
+
+namespace sdl
+{
+	using namespace gpu;
+
+	auto to_sdl(shader_stage stage) -> SDL_GPUShaderStage
+	{
+		using enum shader_stage;
+
+		switch (stage)
+		{
+		case vertex:
+			return SDL_GPU_SHADERSTAGE_VERTEX;
+		case fragment:
+			return SDL_GPU_SHADERSTAGE_FRAGMENT;
+		default:
+			break;
+		}
+		assert(false and "Unhandled shader stage.");
+		return {};
+	}
+
+	auto to_sdl(raster_type type) -> SDL_GPURasterizerState
+	{
+		using enum raster_type;
+		switch (type)
+		{
+		case none_fill:
+			return {
+				.fill_mode = SDL_GPU_FILLMODE_FILL,
+				.cull_mode = SDL_GPU_CULLMODE_NONE,
+			};
+		case none_wire:
+			return {
+				.fill_mode = SDL_GPU_FILLMODE_LINE,
+				.cull_mode = SDL_GPU_CULLMODE_NONE,
+			};
+		case front_ccw_fill:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_FILL,
+				.cull_mode  = SDL_GPU_CULLMODE_FRONT,
+				.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE,
+			};
+		case front_ccw_wire:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_LINE,
+				.cull_mode  = SDL_GPU_CULLMODE_FRONT,
+				.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE,
+			};
+		case back_ccw_fill:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_FILL,
+				.cull_mode  = SDL_GPU_CULLMODE_BACK,
+				.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE,
+			};
+		case back_ccw_wire:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_LINE,
+				.cull_mode  = SDL_GPU_CULLMODE_BACK,
+				.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE,
+			};
+		case front_cw_fill:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_FILL,
+				.cull_mode  = SDL_GPU_CULLMODE_FRONT,
+				.front_face = SDL_GPU_FRONTFACE_CLOCKWISE,
+			};
+		case front_cw_wire:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_LINE,
+				.cull_mode  = SDL_GPU_CULLMODE_FRONT,
+				.front_face = SDL_GPU_FRONTFACE_CLOCKWISE,
+			};
+		case back_cw_fill:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_FILL,
+				.cull_mode  = SDL_GPU_CULLMODE_BACK,
+				.front_face = SDL_GPU_FRONTFACE_CLOCKWISE,
+			};
+		case back_cw_wire:
+			return {
+				.fill_mode  = SDL_GPU_FILLMODE_LINE,
+				.cull_mode  = SDL_GPU_CULLMODE_BACK,
+				.front_face = SDL_GPU_FRONTFACE_CLOCKWISE,
+			};
+		}
+		assert(false and "Unhandled raster type");
+		return {};
+	}
+
+	auto to_sdl(blend_type type) -> SDL_GPUColorTargetBlendState
+	{
+		// TODO: verify and fix blend ops for different types.
+
+		auto src    = SDL_GPUBlendFactor{ SDL_GPU_BLENDFACTOR_ONE };
+		auto dst    = SDL_GPUBlendFactor{ SDL_GPU_BLENDFACTOR_ONE };
+		auto op     = SDL_GPUBlendOp{ SDL_GPU_BLENDOP_ADD };
+		auto enable = false;
+
+		using enum blend_type;
+		switch (type)
+		{
+		case opaque:
+			src = SDL_GPU_BLENDFACTOR_ONE;
+			dst = SDL_GPU_BLENDFACTOR_ZERO;
+			break;
+		case alpha:
+			src = SDL_GPU_BLENDFACTOR_ONE;
+			dst = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA;
+			break;
+		case additive:
+			src = SDL_GPU_BLENDFACTOR_SRC_ALPHA;
+			dst = SDL_GPU_BLENDFACTOR_ONE;
+			break;
+		case non_premultiplied:
+			src = SDL_GPU_BLENDFACTOR_SRC_ALPHA;
+			dst = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA;
+			break;
+		default:
+			break;
+		}
+
+		enable = ((src != SDL_GPU_BLENDFACTOR_ONE) or (dst != SDL_GPU_BLENDFACTOR_ONE));
+
+		return {
+			.src_color_blendfactor = src,
+			.dst_color_blendfactor = dst,
+			.color_blend_op        = op,
+			.src_alpha_blendfactor = src,
+			.dst_alpha_blendfactor = dst,
+			.alpha_blend_op        = op,
+			.enable_blend          = enable,
+		};
+	}
 }
