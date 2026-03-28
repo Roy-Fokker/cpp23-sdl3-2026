@@ -100,11 +100,11 @@ export namespace sdl::gpu
 		return { gpu, { wnd } };
 	}
 
-	auto next_swapchain_image(SDL_Window *wnd, SDL_GPUCommandBuffer *cb) -> SDL_GPUTexture *
+	auto next_swapchain_image(SDL_Window *wnd, SDL_GPUCommandBuffer *cbo) -> SDL_GPUTexture *
 	{
 		auto texture = (SDL_GPUTexture *)nullptr;
 
-		auto result = SDL_WaitAndAcquireGPUSwapchainTexture(cb, wnd, &texture, nullptr, nullptr);
+		auto result = SDL_WaitAndAcquireGPUSwapchainTexture(cbo, wnd, &texture, nullptr, nullptr);
 		assert(result == true and "Wait and acquire GPU swapchain texture failed.");
 		assert(texture != nullptr and "Swapchain texture is null.");
 

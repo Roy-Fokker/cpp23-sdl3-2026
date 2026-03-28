@@ -61,35 +61,55 @@ auto application::run() -> int
 
 void application::prepare_scene()
 {
-
 }
 
 void application::process_events()
 {
-	while (SDL_PollEvent(&evt))
-	{
-		if (evt.type == SDL_EVENT_QUIT)
+	auto handle_keyboard = [&](const SDL_KeyboardEvent &key_evt) {
+		switch (key_evt.scancode)
 		{
+		case SDL_SCANCODE_ESCAPE:
 			quit = true;
 			break;
+		default:
+			break;
 		}
+	};
 
-		if (evt.key.scancode == SDL_SCANCODE_ESCAPE)
+	auto handle_mouse_motion = [&]([[maybe_unused]] const SDL_MouseMotionEvent &mouse_evt) {
+	};
+
+	auto handle_mouse_wheel = [&]([[maybe_unused]] const SDL_MouseWheelEvent &wheel_evt) {
+	};
+
+	while (SDL_PollEvent(&evt))
+	{
+		switch (evt.type)
 		{
+		case SDL_EVENT_QUIT:
 			quit = true;
+			break;
+		case SDL_EVENT_KEY_DOWN:
+			handle_keyboard(evt.key);
+			break;
+		case SDL_EVENT_MOUSE_MOTION:
+			handle_mouse_motion(evt.motion);
+			break;
+		case SDL_EVENT_MOUSE_WHEEL:
+			handle_mouse_wheel(evt.wheel);
+			break;
 		}
 	}
 }
 
 void application::update_state()
 {
-
 }
 
 void application::draw()
 {
-	auto cb     = SDL_AcquireGPUCommandBuffer(gpu.get());
-	auto sc_img = sdl::gpu::next_swapchain_image(wnd.get(), cb);
+	auto cbo    = SDL_AcquireGPUCommandBuffer(gpu.get());
+	auto sc_img = sdl::gpu::next_swapchain_image(wnd.get(), cbo);
 
 	auto color_target = SDL_GPUColorTargetInfo{
 		.texture     = sc_img,
