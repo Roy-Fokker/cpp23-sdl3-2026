@@ -38,7 +38,7 @@
 			"displayName": "LLVM Clang++ configuration",
 			"hidden": true,
 			"cacheVariables": {
-				"CMAKE_CXX_FLAGS": "-std=c++23 -Wall -Wextra"
+				"CMAKE_CXX_FLAGS": "-std=c++23 -Wall -Wextra -Wno-missing-designated-field-initializers"
 			},
 			"environment": {
 				"CC": "clang",
@@ -50,7 +50,7 @@
 			"displayName": "GUN GCC configuration",
 			"hidden": true,
 			"cacheVariables": {
-				"CMAKE_CXX_FLAGS": "-std=c++23 -Wall -Wextra"
+				"CMAKE_CXX_FLAGS": "-std=c++23 -Wall -Wextra -Wno-missing-designated-field-initializers"
 			},
 			"environment": {
 				"CC": "gcc",

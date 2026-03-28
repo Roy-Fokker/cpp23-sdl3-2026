@@ -72,6 +72,8 @@ While there is a preset for GCC in the `CmakePresets.json`, project doesn't buil
     - Prepare Scene
     - Loop till quit event
       - Handle SDL Events
+        - If Window Close or Escape Key, is pressed  
+          quit is true
       - Update application state
       - Draw
   - clean up automatic
