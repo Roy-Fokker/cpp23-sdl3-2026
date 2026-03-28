@@ -4,8 +4,6 @@ import std;
 import sdl;
 
 using namespace std::string_view_literals;
-namespace s_win = sdl::window;
-namespace s_gpu = sdl::gpu;
 
 namespace
 {
@@ -29,10 +27,12 @@ export namespace project
 		void draw();
 
 		// Private Members
-		sdl::sdl_base _sdl;                                                    // SDL base object
-		s_win::window_ptr wnd = s_win::make_window({ WIDTH, HEIGHT, TITLE });  // SDL Window object
-		s_gpu::gpu_ptr gpu    = s_gpu::make_gpu(wnd.get());                    // SDL GPU object
-		SDL_Event evt         = {};                                            // SDL Event object
+		sdl::sdl_base _sdl; // SDL base object
+		sdl::window::window_ptr wnd = sdl::window::make_window({ .width  = WIDTH,
+		                                                         .height = HEIGHT,
+		                                                         .title  = TITLE }); // SDL Window object
+		sdl::gpu::gpu_ptr gpu       = sdl::gpu::make_gpu(wnd.get());                // SDL GPU object
+		SDL_Event evt               = {};                                           // SDL Event object
 
 		bool quit = false; // Loop control
 	};
@@ -40,7 +40,7 @@ export namespace project
 
 using namespace project;
 
-namespace 
+namespace
 {
 	constexpr auto CLEAR_COLOR = SDL_FColor{ 0.2f, 0.2f, 0.4f, 1.0f };
 }
@@ -98,8 +98,8 @@ void application::draw()
 		.store_op    = SDL_GPU_STOREOP_STORE,
 	};
 
-	auto render_pass = SDL_BeginGPURenderPass(cb, &color_target, 1, nullptr);
+	auto render_pass = SDL_BeginGPURenderPass(cbo, &color_target, 1, nullptr);
 	SDL_EndGPURenderPass(render_pass);
 
-	SDL_SubmitGPUCommandBuffer(cb);
+	SDL_SubmitGPUCommandBuffer(cbo);
 }
