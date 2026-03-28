@@ -3,6 +3,9 @@ export module sdl:gpu;
 import std;
 import :base;
 
+namespace rg = std::ranges;
+namespace vw = std::ranges::views;
+
 export namespace sdl::gpu
 {
 	// Special deleter for gpu.
@@ -142,6 +145,44 @@ export namespace sdl::gpu
 		non_premultiplied,
 	};
 
+	auto get_gpu_supported_sampled_count(SDL_GPUDevice *gpu, SDL_GPUTextureFormat format) -> SDL_GPUSampleCount
+	{
+		constexpr auto sample_counts = std::array{
+			SDL_GPU_SAMPLECOUNT_8,
+			SDL_GPU_SAMPLECOUNT_4,
+			SDL_GPU_SAMPLECOUNT_2,
+			SDL_GPU_SAMPLECOUNT_1,
+		};
+
+		auto check_sample_count = [&](auto count) {
+			return SDL_GPUTextureSupportsSampleCount(gpu, format, count);
+		};
+
+		auto rng = sample_counts | vw::take_while(check_sample_count);
+		assert(not rng.empty() and "None of the sample counts are supported");
+		return rng.front();
+	}
+
+	auto get_gpu_supported_depth_stencil_format(SDL_GPUDevice *gpu) -> SDL_GPUTextureFormat
+	{
+		// Order Matters, biggest to smallest
+		constexpr auto depth_formats = std::array{
+			SDL_GPU_TEXTUREFORMAT_D32_FLOAT_S8_UINT,
+			SDL_GPU_TEXTUREFORMAT_D32_FLOAT,
+			SDL_GPU_TEXTUREFORMAT_D24_UNORM_S8_UINT,
+			SDL_GPU_TEXTUREFORMAT_D24_UNORM,
+			SDL_GPU_TEXTUREFORMAT_D16_UNORM,
+		};
+
+		auto check_depth_format = [&](const auto fmt) {
+			return SDL_GPUTextureSupportsFormat(gpu, fmt, SDL_GPU_TEXTURETYPE_2D, SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET);
+		};
+
+		auto rng = depth_formats | vw::take_while(check_depth_format);
+		assert(not rng.empty() and "None of the depth formats are supported.");
+		return rng.front();
+	}
+}
 
 namespace sdl
 {
