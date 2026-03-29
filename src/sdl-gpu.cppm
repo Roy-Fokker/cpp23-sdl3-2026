@@ -1,6 +1,7 @@
 export module sdl:gpu;
 
 import std;
+import io;
 import :base;
 
 namespace rg = std::ranges;

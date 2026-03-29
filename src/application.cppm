@@ -1,6 +1,7 @@
 export module application;
 
 import std;
+import io;
 import sdl;
 
 using namespace std::string_view_literals;
