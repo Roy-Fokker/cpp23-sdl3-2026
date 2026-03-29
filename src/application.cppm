@@ -36,6 +36,12 @@ export namespace project
 		SDL_Event evt               = {};                                           // SDL Event object
 
 		bool quit = false; // Loop control
+
+		struct scene
+		{
+			sdl::gpu::gfx_pipeline_ptr pipeline;
+		};
+		scene scn;
 	};
 }
 
@@ -44,6 +50,11 @@ using namespace project;
 namespace
 {
 	constexpr auto CLEAR_COLOR = SDL_FColor{ 0.2f, 0.2f, 0.4f, 1.0f };
+
+	auto basic_pipeline(SDL_GPUDevice *gpu, SDL_Window *wnd) -> sdl::gpu::gfx_pipeline_ptr
+	{
+		return {};
+	}
 }
 
 auto application::run() -> int
@@ -62,6 +73,7 @@ auto application::run() -> int
 
 void application::prepare_scene()
 {
+	scn.pipeline = basic_pipeline(gpu.get(), wnd.get());
 }
 
 void application::process_events()
