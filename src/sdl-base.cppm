@@ -1,5 +1,7 @@
 export module sdl:base;
 
+import std;
+
 export namespace sdl
 {
 	// If we are building in DEBUG mode, use this variable to enable extra messages
@@ -48,6 +50,6 @@ export namespace sdl
 	template <typename sdl_enum>
 	auto to_sdl(auto enum_value) -> sdl_enum
 	{
-		return static_cast<sdl_enum>(enum_value);
+		return sdl_enum(std::to_underlying(enum_value));
 	}
 } // namespace sdl
