@@ -183,6 +183,46 @@ export namespace sdl::gpu
 		assert(not rng.empty() and "None of the depth formats are supported.");
 		return rng.front();
 	}
+
+	struct shader_builder
+	{
+		io::byte_span shader_binary;
+		shader_stage stage             = shader_stage::invalid;
+		uint32_t sampler_count         = 0;
+		uint32_t uniform_buffer_count  = 0;
+		uint32_t storage_uniform_count = 0;
+		uint32_t storage_texture_count = 0;
+
+		auto build(SDL_GPUDevice *gpu) const -> gfx_shader_ptr;
+	};
+
+	enum class topology_type : uint8_t
+	{
+		triangle_list  = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST,
+		triangle_strip = SDL_GPU_PRIMITIVETYPE_TRIANGLESTRIP,
+		line_list      = SDL_GPU_PRIMITIVETYPE_LINELIST,
+		line_strip     = SDL_GPU_PRIMITIVETYPE_LINESTRIP,
+		point_list     = SDL_GPU_PRIMITIVETYPE_POINTLIST,
+	};
+
+	struct gfx_pipeline_builder
+	{
+		gfx_shader_ptr vertex_shader   = nullptr;
+		gfx_shader_ptr fragment_shader = nullptr;
+
+		std::span<const SDL_GPUVertexAttribute> vertex_attributes;
+		std::span<const SDL_GPUVertexBufferDescription> vertex_buffer_descriptions;
+
+		SDL_GPUTextureFormat color_format = {};
+
+		bool enable_depth_stencil = false;
+
+		raster_type raster     = {};
+		blend_type blend       = {};
+		topology_type topology = {};
+
+		auto build(SDL_GPUDevice *gpu) -> gfx_pipeline_ptr;
+	};
 }
 
 namespace sdl
@@ -318,4 +358,83 @@ namespace sdl
 			.enable_blend          = enable,
 		};
 	}
+}
+
+auto sdl::gpu::shader_builder::build(SDL_GPUDevice *gpu) const -> sdl::gpu::gfx_shader_ptr
+{
+	assert(shader_binary.size() != 0 and "Shader Binary is empty");
+
+	auto shader_info = SDL_GPUShaderCreateInfo{
+		.code_size            = shader_binary.size(),
+		.code                 = std::bit_cast<uint8_t *>(shader_binary.data()), // reinterpret_cast<const uint8_t *>(shader_binary.data()),
+		.entrypoint           = "main",
+		.format               = SHADER_FORMAT(),
+		.stage                = to_sdl(stage),
+		.num_samplers         = sampler_count,
+		.num_storage_textures = storage_texture_count,
+		.num_storage_buffers  = storage_uniform_count,
+		.num_uniform_buffers  = uniform_buffer_count,
+	};
+
+	auto shader = SDL_CreateGPUShader(gpu, &shader_info);
+	assert(shader != nullptr and "Failed to create shader.");
+
+	return { shader, { gpu } };
+}
+
+auto sdl::gpu::gfx_pipeline_builder::build(SDL_GPUDevice *gpu) -> sdl::gpu::gfx_pipeline_ptr
+{
+
+	auto vertex_input_state = SDL_GPUVertexInputState{
+		.vertex_buffer_descriptions = vertex_buffer_descriptions.data(),
+		.num_vertex_buffers         = static_cast<uint32_t>(vertex_buffer_descriptions.size()),
+		.vertex_attributes          = vertex_attributes.data(),
+		.num_vertex_attributes      = static_cast<uint32_t>(vertex_attributes.size()),
+	};
+
+	auto depth_stencil_state  = SDL_GPUDepthStencilState{};
+	auto depth_stencil_format = SDL_GPUTextureFormat{};
+
+	// Surpringly AMD doesn't support D24 on Vulkan, it does on DirectX??
+	if (enable_depth_stencil)
+	{
+		depth_stencil_state = SDL_GPUDepthStencilState{
+			.compare_op          = SDL_GPU_COMPAREOP_LESS,
+			.write_mask          = std::numeric_limits<uint8_t>::max(),
+			.enable_depth_test   = true,
+			.enable_depth_write  = true,
+			.enable_stencil_test = false, // TODO: figure out how to enable stencil under current api
+		};
+
+		depth_stencil_format = get_gpu_supported_depth_stencil_format(gpu);
+	}
+
+	auto color_targets = std::array{
+		SDL_GPUColorTargetDescription{
+			.format      = color_format,
+			.blend_state = to_sdl(blend),
+		},
+	};
+
+	auto target_info = SDL_GPUGraphicsPipelineTargetInfo{
+		.color_target_descriptions = color_targets.data(),
+		.num_color_targets         = static_cast<uint32_t>(color_targets.size()),
+		.depth_stencil_format      = depth_stencil_format,
+		.has_depth_stencil_target  = enable_depth_stencil,
+	};
+
+	auto pipeline_info = SDL_GPUGraphicsPipelineCreateInfo{
+		.vertex_shader       = vertex_shader.get(),
+		.fragment_shader     = fragment_shader.get(),
+		.vertex_input_state  = vertex_input_state,
+		.primitive_type      = to_sdl<SDL_GPUPrimitiveType>(topology),
+		.rasterizer_state    = to_sdl(raster),
+		.depth_stencil_state = depth_stencil_state,
+		.target_info         = target_info,
+	};
+
+	auto pipeline = SDL_CreateGPUGraphicsPipeline(gpu, &pipeline_info);
+	assert(pipeline != nullptr and "Failed to create graphics pipeline.");
+
+	return { pipeline, { gpu } };
 }
