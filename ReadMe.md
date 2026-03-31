@@ -17,6 +17,7 @@ Using what was learned from old template and new knowledge gained since then.
 - SDL v3.4.x
 - GLM
 - FMT
+- Slang Shader Language
 
 ## Pecularities
 
@@ -42,6 +43,14 @@ Using what was learned from old template and new knowledge gained since then.
            libpipewire-0.3-dev libdecor-0-dev
   ```
 - On Wayland (linux), basic gpu device requires calling all the supporting frame/swapchain stuff. Else it will error out and no window will be shown. 
+
+### Shaders
+- `Slang` will be downloaded by `CPM.cmake` during configure step.
+- Shaders will be built using `slangc` and can output `spirv` or `dxil` binary
+- Files to compile are specified using `target_shader_sources`
+- Output file is placed in binary output directory within same folder name as source file. **_Not_** full relative path.
+- If file has `.cs.` in the file name, it will be treated as `Compute` shader
+- Otherwise file is treated as having both `Vertex` and `Fragment/Pixel` entry points.
 
 ## GCC issues
 While there is a preset for GCC in the `CmakePresets.json`, project doesn't build, as GCC is throwing errors on compile. Suspect some flags need to be enabled for GCC to compile modules.
@@ -70,6 +79,9 @@ While there is a preset for GCC in the `CmakePresets.json`, project doesn't buil
     - Create SDL GPU object
   - application run 
     - Prepare Scene
+      - Create pipeline
+        - load shader files
+        - create basic pipeline
     - Loop till quit event
       - Handle SDL Events
         - If Window Close or Escape Key, is pressed  
