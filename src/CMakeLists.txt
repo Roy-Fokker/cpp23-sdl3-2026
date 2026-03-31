@@ -43,4 +43,10 @@ target_precompile_headers(${PRJ_APP_NAME}
 target_link_libraries(${PRJ_APP_NAME}
 	PRIVATE
 		SDL3::SDL3   # SDL3 Library
+		slang::slang
+)
+
+# shader files used by this application
+target_shader_sources(${PRJ_APP_NAME} ${SHADER_FORMAT}
+	shaders/Basic_Triangle.slang
 )

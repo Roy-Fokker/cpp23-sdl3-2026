@@ -29,4 +29,20 @@ include(${CPM_DOWNLOAD_LOCATION})
 
 # Dependencies
 ## Simple Directmedia Library
-CPMAddPackage("gh:libsdl-org/SDL#release-3.4.2")
+CPMAddPackage(
+  URI "gh:libsdl-org/SDL#release-3.4.2"
+  SYSTEM YES)
+
+
+## Slang shader library
+CPMAddPackage(
+  NAME slang
+  VERSION 2026.5.1
+  URL https://github.com/shader-slang/slang/releases/download/v2026.5.1/slang-2026.5.1-${CMAKE_SYSTEM_NAME}-x86_64.zip
+  DOWNLOAD_ONLY YES
+  )
+if(slang_ADDED)
+  set(slang_DIR ${slang_SOURCE_DIR}/lib/cmake/slang) # set path to slangConfig.cmake folder
+  find_package(slang REQUIRED)                       # call find_package
+  include(${CMAKE_MODULE_PATH}/compile-shader.cmake) # include shader compiler script
+endif()
