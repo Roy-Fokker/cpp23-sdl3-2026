@@ -89,3 +89,6 @@ While there is a preset for GCC in the `CmakePresets.json`, project doesn't buil
       - Update application state
       - Draw
   - clean up automatic
+
+## References
+Slang Shader Examples: https://github.com/myemural/VulkanCppExamples/tree/master

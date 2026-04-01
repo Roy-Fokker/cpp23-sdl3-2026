@@ -41,8 +41,8 @@ CPMAddPackage(
   URL https://github.com/shader-slang/slang/releases/download/v2026.5.1/slang-2026.5.1-${CMAKE_SYSTEM_NAME}-x86_64.zip
   DOWNLOAD_ONLY YES
   )
-if(slang_ADDED)
-  set(slang_DIR ${slang_SOURCE_DIR}/lib/cmake/slang) # set path to slangConfig.cmake folder
+if(slang_ADDED) 
+  list(APPEND CMAKE_PREFIX_PATH ${slang_SOURCE_DIR}) # set path to slangConfig.cmake folder
   find_package(slang REQUIRED)                       # call find_package
   include(${CMAKE_MODULE_PATH}/compile-shader.cmake) # include shader compiler script
 endif()
