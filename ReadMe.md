@@ -53,7 +53,12 @@ Using what was learned from old template and new knowledge gained since then.
 - Otherwise file is treated as having both `Vertex` and `Fragment/Pixel` entry points.
 
 ## GCC issues
-While there is a preset for GCC in the `CmakePresets.json`, project doesn't build, as GCC is throwing errors on compile. Suspect some flags need to be enabled for GCC to compile modules.
+While there is a preset for GCC in the `CmakePresets.json`, project doesn't build, as GCC is throwing errors on compile.  
+~~Suspect some flags need to be enabled for GCC to compile modules.~~  
+It looks like GCC hasn't fully implmented C++ Modules feature. In particular, module partitions.  
+See
+- [GCC C++ Modules implmentation page](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Modules.html)
+- [CppRef on Module Partitions](https://en.cppreference.com/w/cpp/language/modules.html#Module_partitions)
 
 ## Build Instructions
 - On Windows
